@@ -4,17 +4,12 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.suse.docker.netapi.datatypes.Token;
-import com.suse.docker.netapi.results.Return;
+import com.suse.docker.netapi.results.Catalog;
+import com.suse.docker.netapi.results.Tags;
 
 public class JsonParser<T> {
 
@@ -25,23 +20,11 @@ public class JsonParser<T> {
             .registerTypeAdapter(Integer.class, Adapters.INTEGER)
             .registerTypeAdapter(Long.class, Adapters.LONG)
             .registerTypeAdapter(Double.class, Adapters.DOUBLE)
-            .registerTypeAdapter(Date.class, new DateAdapter().nullSafe())
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeISOAdapter())
-            .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeISOAdapter())
             .create();
 
-    public static final JsonParser<Return<String>> STRING =
-            new JsonParser<>(new TypeToken<Return<String>>(){});
-    public static final JsonParser<Return<List<Token>>> TOKEN =
-            new JsonParser<>(new TypeToken<Return<List<Token>>>(){});
-    public static final JsonParser<Return<List<Map<String, Map<String, Object>>>>> RETMAPS =
-            new JsonParser<>(
-            new TypeToken<Return<List<Map<String, Map<String, Object>>>>>(){});
-    public static final JsonParser<Return<List<Map<String, Object>>>> RUN_RESULTS =
-            new JsonParser<>(new TypeToken<Return<List<Map<String, Object>>>>(){});
-    public static final JsonParser<Map<String, Object>> MAP =
-            new JsonParser<>(new TypeToken<Map<String, Object>>(){});
-
+    public static final JsonParser<Catalog> CATALOG = new JsonParser<>(new TypeToken<Catalog>() {});
+    public static final JsonParser<Tags> TAGS = new JsonParser<>(new TypeToken<Tags>() {});
+    
     private final TypeToken<T> type;
     private final Gson gson;
 
