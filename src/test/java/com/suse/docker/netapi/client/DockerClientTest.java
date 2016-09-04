@@ -13,16 +13,34 @@ import com.suse.docker.netapi.exception.DockerException;
 import com.suse.docker.netapi.results.Catalog;
 import com.suse.docker.netapi.results.Tags;
 
+/**
+ * Docker Client Test
+ * <p>
+ * Docker Client JUnit test.
+ * </p>
+ */
 public class DockerClientTest {
-	private static final int MOCK_HTTP_PORT = 5000;
+	/*
+	 * Default TCP port to connect to Docker Registry Service.
+	 */
+	private static final int DEFAULT_HTTP_PORT = 5000;
 	private DockerClient dockerClient;
 
+	/**
+	 * SetUp the DockerClientTest.
+	 */
 	@Before
 	public void init() {
-		URI uri = URI.create("http://localhost:" + Integer.toString(MOCK_HTTP_PORT) + "/v2");
+		final URI uri = URI.create("http://localhost:" + Integer.toString(DEFAULT_HTTP_PORT) + "/v2");
 		dockerClient = new DockerClient(uri);
 	}
 
+	/**
+	 * Verified the catalog method.
+	 * 
+	 * @throws DockerException
+	 *             In case of exception.
+	 */
 	@Test
 	public void catalog() throws DockerException {
 		Catalog result = dockerClient.catalog();
@@ -32,7 +50,13 @@ public class DockerClientTest {
 		assertTrue(result.getRepositories().size() > 0);
 		assertTrue(result.getRepositories().get(0).equalsIgnoreCase("ubuntu"));
 	}
-	
+
+	/**
+	 * Verified the listTags method.
+	 * 
+	 * @throws DockerException
+	 *             In case of exception.
+	 */
 	@Test
 	public void listTags() throws DockerException {
 		Catalog catalog = dockerClient.catalog();
