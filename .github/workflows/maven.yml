@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: "CI Maven ${{ github.repository }} build."
+name: CI Maven build.
 
 on:
   push:
