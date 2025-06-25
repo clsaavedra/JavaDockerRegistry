@@ -19,14 +19,18 @@ jobs:
         registry: docker.io
         image: registry:2
         options: --publish 5000:5000
-    - name: Set up JDK 17
+      run: |
+        docker pull docker.io/library/registry
+        docker tag docker.io/library/registry localhost:5000/registry
+        docker push localhost:5000/registry
+    - name: Set up JDK 8
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '8'
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package -DskipTests --file pom.xml
+      run: mvn -B package --file pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
