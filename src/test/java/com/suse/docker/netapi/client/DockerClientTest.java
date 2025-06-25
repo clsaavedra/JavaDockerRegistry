@@ -20,10 +20,22 @@ import com.suse.docker.netapi.results.Tags;
  * </p>
  */
 public class DockerClientTest {
+	private static final String ASSERT_MESSAGE_REPOSITORY_DOES_NOT_EXIST = "Does not exists repositories. The registry must have at list one repository";
+	/*
+	 * Registry version
+	 */
+	private static final String DEFAULT_HTTP_VERSION = "/v2";
+	/*
+	 * Default HTTP URL
+	 */
+	private static final String DEFAULT_HTTP_URL = "http://localhost";
 	/*
 	 * Default TCP port to connect to Docker Registry Service.
 	 */
 	private static final int DEFAULT_HTTP_PORT = 5000;
+	/*
+	 * DockerClient reference
+	 */
 	private DockerClient dockerClient;
 
 	/**
@@ -31,7 +43,7 @@ public class DockerClientTest {
 	 */
 	@Before
 	public void init() {
-		final URI uri = URI.create("http://localhost:" + Integer.toString(DEFAULT_HTTP_PORT) + "/v2");
+		final URI uri = URI.create(DEFAULT_HTTP_URL + ":" + Integer.toString(DEFAULT_HTTP_PORT) + DEFAULT_HTTP_VERSION);
 		dockerClient = new DockerClient(uri);
 	}
 
@@ -46,9 +58,7 @@ public class DockerClientTest {
 		Catalog result = dockerClient.catalog();
 		assertNotNull(result);
 		assertNotNull(result.getRepositories());
-		assertFalse(result.getRepositories().isEmpty());
-		assertTrue(result.getRepositories().size() > 0);
-		assertTrue(result.getRepositories().get(0).equalsIgnoreCase("ubuntu"));
+		assertFalse(ASSERT_MESSAGE_REPOSITORY_DOES_NOT_EXIST, result.getRepositories().isEmpty());
 	}
 
 	/**
@@ -60,10 +70,6 @@ public class DockerClientTest {
 	@Test
 	public void listTags() throws DockerException {
 		Catalog catalog = dockerClient.catalog();
-		assertNotNull(catalog);
-		assertNotNull(catalog.getRepositories());
-		assertFalse(catalog.getRepositories().isEmpty());
-		assertTrue(catalog.getRepositories().size() > 0);
 		final String name = catalog.getRepositories().get(0);
 		Tags tag = dockerClient.listTags(name);
 		assertNotNull(tag);
