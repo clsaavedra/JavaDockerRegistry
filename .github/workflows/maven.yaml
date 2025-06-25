@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Startup registry
-      uses: actions/docker-run-actions@v3
+      uses: addnab/docker-run-action@v3
       with:
         registry: docker.io
         image: registry:2
