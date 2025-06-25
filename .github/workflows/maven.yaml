@@ -17,9 +17,10 @@ jobs:
       uses: addnab/docker-run-action@v3
       with:
         registry: docker.io
-        image: registry:2
-        options: --publish 5000:5000
+        image: library/registry:2
+        options: --publish 5000:5000 --detach --name=registry --rm
     - run: |
+        docker ps --all
         docker pull docker.io/library/registry
         docker tag docker.io/library/registry localhost:5000/registry
         docker push localhost:5000/registry
